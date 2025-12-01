@@ -1164,6 +1164,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: FarmLand_Wet_Tile_47
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 88
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bc71c8e7f663ae418791d1e86afdb9a
+      internalID: 211756306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -1222,6 +1244,7 @@ TextureImporter:
       FarmLand_Wet_Tile_44: -275936730
       FarmLand_Wet_Tile_45: 1254415498
       FarmLand_Wet_Tile_46: 1947472527
+      FarmLand_Wet_Tile_47: 211756306
       FarmLand_Wet_Tile_5: -8091119991103756802
       FarmLand_Wet_Tile_6: -3306948508049573734
       FarmLand_Wet_Tile_7: 1396038726

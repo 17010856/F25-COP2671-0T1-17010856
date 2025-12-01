@@ -1,37 +1,43 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 3f;
 
     private Rigidbody2D rb;
     private Vector2 input;
-    private Animator animator;
 
+    [Header("Animation")]
+    private Animator animator;
     private float lastMoveX = 0f;
-    private float lastMoveY = -1f; // Default facing down (or whatever your sprite uses)
+    private float lastMoveY = -1f; 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponentInChildren<Animator>(); // Animator on Farmer_Bob child
+        rb.gravityScale = 0;     
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation; 
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
-        // Get input
+        // Get player input
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
         input = input.normalized;
 
-        // Remember last movement direction
+        // Update last movement direction
         if (input != Vector2.zero)
         {
             lastMoveX = input.x;
             lastMoveY = input.y;
         }
 
-        // Set animator parameters
+        // Update animator
         if (animator != null)
         {
             animator.SetFloat("MoveX", input != Vector2.zero ? input.x : lastMoveX);
@@ -42,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + input * moveSpeed * Time.fixedDeltaTime);
+        // Move using velocity so collisions work properly
+        rb.linearVelocity = input * moveSpeed;
     }
 }
