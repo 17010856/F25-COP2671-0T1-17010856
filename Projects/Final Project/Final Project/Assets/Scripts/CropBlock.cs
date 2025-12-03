@@ -28,6 +28,12 @@ public class CropBlock
 
     public void TillSoil()
     {
+        if (isPlanted)
+        {
+            Debug.Log("Can't till soil with crops planted!");
+            return;
+        }
+        
         isTilled = true;
         if (soilRenderer != null)
         {

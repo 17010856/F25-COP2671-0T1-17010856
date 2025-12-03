@@ -50,9 +50,14 @@ public class SeedSelector : MonoBehaviour
 
         for (int i = 0; i < seedButtons.Length; i++)
         {
-            ColorBlock colors = seedButtons[i].colors;
-            colors.normalColor = (i == index) ? selectedColor : normalColor;
-            seedButtons[i].colors = colors;
+            if (seedButtons[i] != null)
+            {
+                Image buttonImage = seedButtons[i].GetComponent<Image>();
+                if (buttonImage != null)
+                {
+                    buttonImage.color = (i == index) ? selectedColor : normalColor;
+                }
+            }
         }
 
         Debug.Log($"Selected seed: {seed.cropName}");

@@ -6,6 +6,7 @@ public class FarmingController : MonoBehaviour
     public CropManager cropManager;
     public Transform playerTransform;
     public SeedSelector seedSelector;
+    public ForagingManager foragingManager;
 
     [Header("Settings")]
     public float interactRange = 1.5f;
@@ -103,6 +104,20 @@ public class FarmingController : MonoBehaviour
             InventorySystem inventory = playerTransform.GetComponent<InventorySystem>();
             block.HarvestPlants(inventory);
             Debug.Log("Harvest button pressed on nearby tile");
+        }
+        else if (foragingManager != null)
+        {
+            ForageSpot forageSpot = foragingManager.GetClosestForageSpot(playerTransform.position, interactRange);
+            if (forageSpot != null)
+            {
+                InventorySystem inventory = playerTransform.GetComponent<InventorySystem>();
+                forageSpot.Harvest(inventory);
+                Debug.Log("Harvested forageable crop");
+            }
+            else
+            {
+                Debug.Log("No nearby tile to harvest");
+            }
         }
         else
         {
