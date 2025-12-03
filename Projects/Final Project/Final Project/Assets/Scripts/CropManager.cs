@@ -13,6 +13,9 @@ public class CropManager : MonoBehaviour
     public Sprite tilledSoilSprite;
     public Sprite wateredSoilSprite;
 
+    [Header("Time Manager")]
+    public TimeManager timeManager;  // NEW: Reference to TimeManager
+
     public CropBlock[,] cropGrid;
 
     void Start()
@@ -23,18 +26,24 @@ public class CropManager : MonoBehaviour
             return;
         }
 
+        if (timeManager == null)
+        {
+            Debug.LogError("TimeManager not assigned to CropManager!");
+        }
+
         CreateGridUsingTilemap(farmTilemap);
     }
 
     void Update()
     {
-        if (cropGrid == null) return;
+        if (cropGrid == null || timeManager == null) return;
 
         foreach (var block in cropGrid)
         {
             if (block != null)
             {
-                block.Grow(Time.deltaTime);
+                // Pass current time to Grow method
+                block.Grow(Time.deltaTime, timeManager.time);
             }
         }
     }
@@ -88,7 +97,5 @@ public class CropManager : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("Crop grid initialized for painted tiles only.");
     }
 }

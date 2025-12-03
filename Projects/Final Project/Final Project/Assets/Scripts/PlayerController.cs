@@ -82,6 +82,13 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("MoveY", input != Vector2.zero ? input.y : lastMoveY);
             // Set "Moving" boolean
             animator.SetBool("Moving", input != Vector2.zero);
+            
+            // Flip sprite based on direction (for mirroring left/right animations)
+            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null && lastMoveX != 0)
+            {
+                spriteRenderer.flipX = lastMoveX < 0; // flip when facing left
+            }
         }
     }
 
@@ -104,12 +111,30 @@ public class PlayerController : MonoBehaviour
     // Called by UI button, input, or an interaction system
     public void StartWatering()
     {
-        if (animator != null && !IsActionStateActive())
+        if (animator != null && !IsActionStateActive() && !animator.GetBool("IsWatering"))
         {
             // Trigger the animation transition
             animator.SetBool("IsWatering", true);
             // Start coroutine to reset the flag after the animation finishes
             StartCoroutine(StopWateringAfterAnimation());
+        }
+    }
+
+    public void StartSwinging()
+    {
+        if (animator != null && !IsActionStateActive() && !animator.GetBool("IsSwinging"))
+        {
+            animator.SetBool("IsSwinging", true);
+            StartCoroutine(StopSwingingAfterAnimation());
+        }
+    }
+
+    public void StartPlanting()
+    {
+        if (animator != null && !IsActionStateActive() && !animator.GetBool("IsPlanting"))
+        {
+            animator.SetBool("IsPlanting", true);
+            StartCoroutine(StopPlantingAfterAnimation());
         }
     }
 
@@ -128,13 +153,17 @@ public class PlayerController : MonoBehaviour
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         
         // IMPORTANT: You must match the name of the state in your Animator Controller!
-        return stateInfo.IsName("WateringRight") || 
-               stateInfo.IsName("WateringLeft") || 
-               stateInfo.IsName("WateringUp") || 
-               stateInfo.IsName("WateringDown");
-        // Also check the generic boolean flag:
-        // return animator.GetBool("IsWatering"); // This is a simpler alternative for blocking, 
-                                                  // but checking the state ensures it's mid-animation.
+        return stateInfo.IsName("Water_Forward") ||
+               stateInfo.IsName("Water_Backward") ||
+               stateInfo.IsName("Water_Right") ||
+               stateInfo.IsName("Water_Left") ||
+               stateInfo.IsName("Swinging_Forward") ||
+               stateInfo.IsName("Swinging_Backward") ||
+               stateInfo.IsName("Swinging_Right") ||
+               stateInfo.IsName("Planting_Forward") ||
+               stateInfo.IsName("Planting_Backward") ||
+               stateInfo.IsName("Laying_Down") ||
+               stateInfo.IsName("Planting_Right");
     }
 
     /// <summary>
@@ -143,7 +172,6 @@ public class PlayerController : MonoBehaviour
     private IEnumerator StopWateringAfterAnimation()
     {
         // 1. Wait a frame for the animation system to start the transition
-        // This ensures GetCurrentAnimatorStateInfo(0) returns the action state.
         yield return null; 
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -153,17 +181,58 @@ public class PlayerController : MonoBehaviour
         if (clipLength <= 0.01f)
         {
             Debug.LogWarning("Failed to get action clip length. Using 1 second fallback.");
-            clipLength = 1f; // Use a safe default time
+            clipLength = 1f;
         }
 
         // 2. Wait for the animation to finish
-        // Use the length of the currently playing action state
         yield return new WaitForSeconds(clipLength);
 
         // 3. Reset the IsWatering flag
         if (animator != null)
         {
             animator.SetBool("IsWatering", false);
+        }
+    }
+
+    private IEnumerator StopSwingingAfterAnimation()
+    {
+        yield return null;
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+        
+        if (clipLength <= 0.01f)
+        {
+            Debug.LogWarning("Failed to get action clip length. Using 1 second fallback.");
+            clipLength = 1f;
+        }
+        
+        yield return new WaitForSeconds(clipLength);
+        
+        if (animator != null)
+        {
+            animator.SetBool("IsSwinging", false);
+        }
+    }
+
+    private IEnumerator StopPlantingAfterAnimation()
+    {
+        yield return null;
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+        
+        if (clipLength <= 0.01f)
+        {
+            Debug.LogWarning("Failed to get action clip length. Using 1 second fallback.");
+            clipLength = 1f;
+        }
+        
+        yield return new WaitForSeconds(clipLength);
+        
+        if (animator != null)
+        {
+            animator.SetBool("IsPlanting", false);
         }
     }
 }

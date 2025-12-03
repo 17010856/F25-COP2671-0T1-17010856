@@ -8,10 +8,11 @@ public class CropBlock
     public SpriteRenderer cropRenderer;   // visual for crop
     public SeedPacket seedData;
 
+    public bool isTilled = false;  // NEW: tracks if soil has been hoed
     public bool isPlanted = false;
     public bool isWatered = false;
     public float growthTimer = 0f;
-    public float timePerStage = 5f; // seconds per stage
+    public float timePerStage = 2f; // seconds per stage
 
     public Sprite soilSprite;   // optional: tilled soil
     public Sprite waterSprite;  // optional: watered soil
@@ -28,60 +29,78 @@ public class CropBlock
 
     public void TillSoil()
     {
+        isTilled = true;  // Mark as tilled
         if (soilRenderer != null)
         {
             soilRenderer.sprite = soilSprite;
         }
-        Debug.Log("Soil tilled");
+        Debug.Log("Soil tilled!");
     }
 
     public void WaterSoil()
     {
-        if (isPlanted)
+        // Can only water if soil is tilled AND planted
+        if (!isTilled)
         {
-            isWatered = true;
-            if (soilRenderer != null) soilRenderer.sprite = waterSprite;
-            Debug.Log("Soil watered — crop can now grow");
+            Debug.Log("Need to hoe the soil first!");
+            return;
         }
-        else
+        
+        if (!isPlanted)
         {
             Debug.Log("Nothing planted here to water");
+            return;
         }
+        
+        isWatered = true;
+        if (soilRenderer != null) soilRenderer.sprite = waterSprite;
+        Debug.Log("Soil watered!");
     }
 
     public void PlantSeed(SeedPacket seed)
     {
+        // Can only plant if soil is tilled
+        if (!isTilled)
+        {
+            Debug.Log("Need to hoe the soil first!");
+            return;
+        }
+        
         seedData = seed;
         currentGrowthStage = 0;
         isPlanted = true;
         isWatered = false;
         growthTimer = 0f;
         UpdateSprite();
-        Debug.Log($"Planted {seed.cropName}");
+        Debug.Log("Seed planted!");
     }
 
     public void HarvestPlants()
     {
         if (seedData != null && currentGrowthStage == seedData.growthSprites.Length - 1)
         {
-            Debug.Log($"Harvested {seedData.cropName}");
+            Debug.Log("Harvested!");
             seedData = null;
             currentGrowthStage = 0;
             isPlanted = false;
             isWatered = false;
+            isTilled = false;  // Reset tilled state after harvest
             growthTimer = 0f;
             if (cropRenderer != null) cropRenderer.sprite = null;
             if (soilRenderer != null) soilRenderer.sprite = null;
         }
         else
         {
-            Debug.Log("Crop not ready to harvest");
+            Debug.Log("Crop not ready to harvest yet");
         }
     }
 
-    public void Grow(float deltaTime)
+    public void Grow(float deltaTime, float currentTime)
     {
-        if (isPlanted && isWatered && currentGrowthStage < seedData.growthSprites.Length - 1)
+        // Only grow during daytime (6am to 8pm)
+        bool isDaytime = currentTime >= 6f && currentTime <= 20f;
+        
+        if (isPlanted && isWatered && isDaytime && currentGrowthStage < seedData.growthSprites.Length - 1)
         {
             growthTimer += deltaTime;
             if (growthTimer >= timePerStage)
