@@ -14,7 +14,7 @@ public class CropManager : MonoBehaviour
     public Sprite wateredSoilSprite;
 
     [Header("Time Manager")]
-    public TimeManager timeManager;  // NEW: Reference to TimeManager
+    public TimeManager timeManager;
 
     public CropBlock[,] cropGrid;
 
@@ -42,7 +42,6 @@ public class CropManager : MonoBehaviour
         {
             if (block != null)
             {
-                // Pass current time to Grow method
                 block.Grow(Time.deltaTime, timeManager.time);
             }
         }
@@ -63,29 +62,26 @@ public class CropManager : MonoBehaviour
                 {
                     CropBlock block = new CropBlock();
 
-                    // Create GameObject to hold soil and crop
                     Vector3 worldPos = tilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
                     GameObject tileGO = new GameObject($"Tile_{x}_{y}");
                     tileGO.transform.position = worldPos;
                     tileGO.transform.parent = this.transform;
 
-                    // Soil renderer
                     GameObject soilGO = new GameObject("Soil");
                     soilGO.transform.parent = tileGO.transform;
                     soilGO.transform.localPosition = Vector3.zero;
                     SpriteRenderer soilSR = soilGO.AddComponent<SpriteRenderer>();
-                    soilSR.sortingOrder = 0; // BEHIND PLAYER
+                    soilSR.sortingOrder = 0;
                     soilSR.sortingLayerName = "Default";
                     block.soilRenderer = soilSR;
                     block.soilSprite = tilledSoilSprite;
                     block.waterSprite = wateredSoilSprite;
 
-                    // Crop renderer
                     GameObject cropGO = new GameObject("Crop");
                     cropGO.transform.parent = tileGO.transform;
                     cropGO.transform.localPosition = Vector3.zero;
                     SpriteRenderer cropSR = cropGO.AddComponent<SpriteRenderer>();
-                    cropSR.sortingOrder = 1; // BEHIND PLAYER
+                    cropSR.sortingOrder = 1;
                     cropSR.sortingLayerName = "Default";
                     block.cropRenderer = cropSR;
 

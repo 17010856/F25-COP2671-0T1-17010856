@@ -4,20 +4,19 @@ using UnityEngine;
 public class CropBlock
 {
     public int currentGrowthStage = 0;
-    public SpriteRenderer soilRenderer;   // visual for tilled/watered soil
-    public SpriteRenderer cropRenderer;   // visual for crop
+    public SpriteRenderer soilRenderer;
+    public SpriteRenderer cropRenderer;
     public SeedPacket seedData;
 
-    public bool isTilled = false;  // NEW: tracks if soil has been hoed
+    public bool isTilled = false;
     public bool isPlanted = false;
     public bool isWatered = false;
     public float growthTimer = 0f;
-    public float timePerStage = 2f; // seconds per stage
+    public float timePerStage = 5f;
 
-    public Sprite soilSprite;   // optional: tilled soil
-    public Sprite waterSprite;  // optional: watered soil
+    public Sprite soilSprite;
+    public Sprite waterSprite;
 
-    // Update crop sprite
     public void UpdateSprite()
     {
         if (seedData != null && cropRenderer != null)
@@ -29,7 +28,7 @@ public class CropBlock
 
     public void TillSoil()
     {
-        isTilled = true;  // Mark as tilled
+        isTilled = true;
         if (soilRenderer != null)
         {
             soilRenderer.sprite = soilSprite;
@@ -39,7 +38,6 @@ public class CropBlock
 
     public void WaterSoil()
     {
-        // Can only water if soil is tilled AND planted
         if (!isTilled)
         {
             Debug.Log("Need to hoe the soil first!");
@@ -59,7 +57,6 @@ public class CropBlock
 
     public void PlantSeed(SeedPacket seed)
     {
-        // Can only plant if soil is tilled
         if (!isTilled)
         {
             Debug.Log("Need to hoe the soil first!");
@@ -84,7 +81,7 @@ public class CropBlock
             currentGrowthStage = 0;
             isPlanted = false;
             isWatered = false;
-            isTilled = false;  // Reset tilled state after harvest
+            isTilled = false;
             growthTimer = 0f;
             if (cropRenderer != null) cropRenderer.sprite = null;
             if (soilRenderer != null) soilRenderer.sprite = null;
@@ -97,7 +94,6 @@ public class CropBlock
 
     public void Grow(float deltaTime, float currentTime)
     {
-        // Only grow during daytime (6am to 8pm)
         bool isDaytime = currentTime >= 6f && currentTime <= 20f;
         
         if (isPlanted && isWatered && isDaytime && currentGrowthStage < seedData.growthSprites.Length - 1)

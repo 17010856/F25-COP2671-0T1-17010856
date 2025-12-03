@@ -7,9 +7,8 @@ public class FarmingController : MonoBehaviour
     public Transform playerTransform;
 
     [Header("Settings")]
-    public float interactRange = 1.5f; // how close the player must be to a tile
+    public float interactRange = 1.5f;
 
-    // Find the closest farm tile within range
     private CropBlock GetClosestTile()
     {
         CropBlock closest = null;
@@ -35,17 +34,14 @@ public class FarmingController : MonoBehaviour
         return closest;
     }
 
-    // Button Methods
     public void OnHoe()
     {
-        // ALWAYS trigger player animation
         PlayerController player = playerTransform.GetComponent<PlayerController>();
         if (player != null)
         {
             player.StartSwinging();
         }
         
-        // Only do farming logic if near a tile
         CropBlock block = GetClosestTile();
         if (block != null)
         {
@@ -59,14 +55,12 @@ public class FarmingController : MonoBehaviour
 
     public void OnWater()
     {
-        // ALWAYS trigger player animation
         PlayerController player = playerTransform.GetComponent<PlayerController>();
         if (player != null)
         {
             player.StartWatering();
         }
         
-        // Only do farming logic if near a tile
         CropBlock block = GetClosestTile();
         if (block != null)
         {
@@ -77,14 +71,12 @@ public class FarmingController : MonoBehaviour
 
     public void OnSeed()
     {
-        // ALWAYS trigger player animation
         PlayerController player = playerTransform.GetComponent<PlayerController>();
         if (player != null)
         {
             player.StartPlanting();
         }
         
-        // Only do farming logic if near a tile
         CropBlock block = GetClosestTile();
         if (block != null && cropManager.testSeedPacket != null)
         {
@@ -94,14 +86,12 @@ public class FarmingController : MonoBehaviour
 
     public void OnHarvest()
     {
-        // ALWAYS trigger player animation
         PlayerController player = playerTransform.GetComponent<PlayerController>();
         if (player != null)
         {
-            player.StartSwinging();  // Use same swinging animation for harvest
+            player.StartSwinging();
         }
         
-        // Only do farming logic if near a tile
         CropBlock block = GetClosestTile();
         if (block != null)
         {
