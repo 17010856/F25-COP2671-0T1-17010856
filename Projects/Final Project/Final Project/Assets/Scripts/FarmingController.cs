@@ -5,6 +5,7 @@ public class FarmingController : MonoBehaviour
     [Header("References")]
     public CropManager cropManager;
     public Transform playerTransform;
+    public SeedSelector seedSelector;
 
     [Header("Settings")]
     public float interactRange = 1.5f;
@@ -78,9 +79,13 @@ public class FarmingController : MonoBehaviour
         }
         
         CropBlock block = GetClosestTile();
-        if (block != null && cropManager.testSeedPacket != null)
+        if (block != null && seedSelector != null)
         {
-            block.PlantSeed(cropManager.testSeedPacket);
+            SeedPacket selectedSeed = seedSelector.GetSelectedSeed();
+            if (selectedSeed != null)
+            {
+                block.PlantSeed(selectedSeed);
+            }
         }
     }
 
@@ -95,7 +100,8 @@ public class FarmingController : MonoBehaviour
         CropBlock block = GetClosestTile();
         if (block != null)
         {
-            block.HarvestPlants();
+            InventorySystem inventory = playerTransform.GetComponent<InventorySystem>();
+            block.HarvestPlants(inventory);
             Debug.Log("Harvest button pressed on nearby tile");
         }
         else

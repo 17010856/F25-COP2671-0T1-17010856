@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8474de093b6a42d4f8488c4deb921cf4, type: 3}
-  m_Name: TestSeed
+  m_Name: PumpkinSeed
   m_EditorClassIdentifier: Assembly-CSharp::SeedPacket
-  cropName: 
+  cropName: Pumpkin
   growthSprites:
   - {fileID: 3434212400135504495, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
   - {fileID: 5740656609656157324, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
-  - {fileID: 1432393377519738710, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
   - {fileID: 9006033842410854250, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
-  coverImage: {fileID: 0}
-  harvestablePrefab: {fileID: 0}
+  - {fileID: 4225046087067793717, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
+  coverImage: {fileID: 4225046087067793717, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
+  harvestItem: {fileID: 11400000, guid: 10b79f8431920da46abb0a4f77191bea, type: 2}
+  harvestAmount: 1

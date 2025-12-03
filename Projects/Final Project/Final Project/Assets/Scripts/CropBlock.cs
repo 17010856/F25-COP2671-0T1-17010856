@@ -72,10 +72,15 @@ public class CropBlock
         Debug.Log("Seed planted!");
     }
 
-    public void HarvestPlants()
+    public void HarvestPlants(InventorySystem inventory)
     {
         if (seedData != null && currentGrowthStage == seedData.growthSprites.Length - 1)
         {
+            if (inventory != null && seedData.harvestItem != null)
+            {
+                inventory.AddItem(seedData.harvestItem, seedData.harvestAmount);
+            }
+            
             Debug.Log("Harvested!");
             seedData = null;
             currentGrowthStage = 0;
