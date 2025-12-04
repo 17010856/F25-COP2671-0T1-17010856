@@ -8,4 +8,5 @@ public class SeedPacket : ScriptableObject
     public Sprite coverImage;
     public HarvestableItem harvestItem;
     public int harvestAmount = 1;
+    public float timePerStage = 90f; 
 }

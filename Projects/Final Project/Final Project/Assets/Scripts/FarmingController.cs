@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// connects button presses to farming actions
 public class FarmingController : MonoBehaviour
 {
     [Header("References")]
@@ -8,10 +9,13 @@ public class FarmingController : MonoBehaviour
     public SeedSelector seedSelector;
     public ForagingManager foragingManager;
 
-    [Header("Settings")]
-    public float interactRange = 1.5f;
+    [Header("Particle Effects")]
+    public GameObject harvestParticles;
 
-    private CropBlock GetClosestTile()
+    [Header("Settings")]
+    public float interactRange = 1.5f; // how close player needs to be
+
+    private CropBlock GetClosestTile() // finds nearest farm tile
     {
         CropBlock closest = null;
         float minDist = Mathf.Infinity;
@@ -41,17 +45,13 @@ public class FarmingController : MonoBehaviour
         PlayerController player = playerTransform.GetComponent<PlayerController>();
         if (player != null)
         {
-            player.StartSwinging();
+            player.StartSwinging(); // play animation
         }
         
         CropBlock block = GetClosestTile();
         if (block != null)
         {
             block.TillSoil();
-        }
-        else
-        {
-            Debug.Log("No nearby tile to hoe");
         }
     }
 
@@ -67,7 +67,6 @@ public class FarmingController : MonoBehaviour
         if (block != null)
         {
             block.WaterSoil();
-            Debug.Log("Water button pressed on nearby tile");
         }
     }
 
@@ -99,29 +98,19 @@ public class FarmingController : MonoBehaviour
         }
         
         CropBlock block = GetClosestTile();
-        if (block != null)
+        if (block != null) // check farm tiles first
         {
             InventorySystem inventory = playerTransform.GetComponent<InventorySystem>();
-            block.HarvestPlants(inventory);
-            Debug.Log("Harvest button pressed on nearby tile");
+            block.HarvestPlants(inventory, harvestParticles);
         }
-        else if (foragingManager != null)
+        else if (foragingManager != null) // then check foraging tiles
         {
             ForageSpot forageSpot = foragingManager.GetClosestForageSpot(playerTransform.position, interactRange);
             if (forageSpot != null)
             {
                 InventorySystem inventory = playerTransform.GetComponent<InventorySystem>();
                 forageSpot.Harvest(inventory);
-                Debug.Log("Harvested forageable crop");
             }
-            else
-            {
-                Debug.Log("No nearby tile to harvest");
-            }
-        }
-        else
-        {
-            Debug.Log("No nearby tile to harvest");
         }
     }
 }

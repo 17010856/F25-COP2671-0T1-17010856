@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// sets up the farm grid and manages crop growth
 public class CropManager : MonoBehaviour
 {
     [Header("Tilemap Reference")]
@@ -16,7 +17,7 @@ public class CropManager : MonoBehaviour
     [Header("Time Manager")]
     public TimeManager timeManager;
 
-    public CropBlock[,] cropGrid;
+    public CropBlock[,] cropGrid; // 2D array of all farm tiles
 
     void Start()
     {
@@ -38,7 +39,7 @@ public class CropManager : MonoBehaviour
     {
         if (cropGrid == null || timeManager == null) return;
 
-        foreach (var block in cropGrid)
+        foreach (var block in cropGrid) // grow all crops each frame
         {
             if (block != null)
             {
@@ -47,7 +48,7 @@ public class CropManager : MonoBehaviour
         }
     }
 
-    void CreateGridUsingTilemap(Tilemap tilemap)
+    void CreateGridUsingTilemap(Tilemap tilemap) // builds grid based on tilemap
     {
         BoundsInt bounds = tilemap.cellBounds;
         cropGrid = new CropBlock[bounds.size.x, bounds.size.y];

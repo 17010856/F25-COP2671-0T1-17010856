@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HarvestableItem
   itemName: Pumpkin
   itemIcon: {fileID: 4225046087067793717, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
-  sellPrice: 10
+  sellPrice: 20
   description: BIg 'ol Pumpkin

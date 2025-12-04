@@ -12,7 +12,7 @@ public class CropBlock
     public bool isPlanted = false;
     public bool isWatered = false;
     public float growthTimer = 0f;
-    public float timePerStage = 5f;
+    public float timePerStage = 90f;
 
     public Sprite soilSprite;
     public Sprite waterSprite;
@@ -78,13 +78,19 @@ public class CropBlock
         Debug.Log("Seed planted!");
     }
 
-    public void HarvestPlants(InventorySystem inventory)
+    public void HarvestPlants(InventorySystem inventory, GameObject harvestParticles = null)
     {
         if (seedData != null && currentGrowthStage == seedData.growthSprites.Length - 1)
         {
             if (inventory != null && seedData.harvestItem != null)
             {
                 inventory.AddItem(seedData.harvestItem, seedData.harvestAmount);
+            }
+
+            if (harvestParticles != null && cropRenderer != null)
+            {
+                GameObject particles = Object.Instantiate(harvestParticles, cropRenderer.transform.position, Quaternion.identity);
+                Object.Destroy(particles, 2f);
             }
             
             Debug.Log("Harvested!");
@@ -107,10 +113,12 @@ public class CropBlock
     {
         bool isDaytime = currentTime >= 6f && currentTime <= 20f;
         
+        float stageTime = seedData != null ? seedData.timePerStage : timePerStage;
+        
         if (isPlanted && isWatered && isDaytime && currentGrowthStage < seedData.growthSprites.Length - 1)
         {
             growthTimer += deltaTime;
-            if (growthTimer >= timePerStage)
+            if (growthTimer >= stageTime)
             {
                 growthTimer = 0f;
                 currentGrowthStage++;

@@ -21,3 +21,4 @@ MonoBehaviour:
   coverImage: {fileID: 4225046087067793717, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
   harvestItem: {fileID: 11400000, guid: 10b79f8431920da46abb0a4f77191bea, type: 2}
   harvestAmount: 1
+  timePerStage: 20

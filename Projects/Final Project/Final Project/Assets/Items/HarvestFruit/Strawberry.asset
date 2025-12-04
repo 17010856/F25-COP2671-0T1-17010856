@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HarvestableItem
   itemName: Strawberry
   itemIcon: {fileID: 6179586033448826104, guid: 3c0fd9e79fa04564cb25b27e59aceaac, type: 3}
-  sellPrice: 20
+  sellPrice: 10
   description: Sweet Red Strawberry

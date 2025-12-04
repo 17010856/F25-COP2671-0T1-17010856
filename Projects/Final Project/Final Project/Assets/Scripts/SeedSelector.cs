@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// handles seed selection toolbar
 public class SeedSelector : MonoBehaviour
 {
-    public SeedPacket[] availableSeeds;
+    public SeedPacket[] availableSeeds; // all seeds player can plant
     public GameObject seedButtonPrefab;
     public Transform seedButtonContainer;
     public Color selectedColor = Color.green;
@@ -16,13 +17,13 @@ public class SeedSelector : MonoBehaviour
     {
         CreateSeedButtons();
         
-        if (availableSeeds.Length > 0)
+        if (availableSeeds.Length > 0) // select first seed by default
         {
             SelectSeed(availableSeeds[0], 0);
         }
     }
 
-    void CreateSeedButtons()
+    void CreateSeedButtons() // creates button for each seed
     {
         seedButtons = new Button[availableSeeds.Length];
 
@@ -44,7 +45,7 @@ public class SeedSelector : MonoBehaviour
         }
     }
 
-    void SelectSeed(SeedPacket seed, int index)
+    void SelectSeed(SeedPacket seed, int index) // changes which seed is selected
     {
         currentlySelectedSeed = seed;
 
@@ -59,8 +60,6 @@ public class SeedSelector : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log($"Selected seed: {seed.cropName}");
     }
 
     public SeedPacket GetSelectedSeed()

@@ -61,4 +61,9 @@ public class InventorySystem : MonoBehaviour
         InventorySlot existingSlot = inventory.Find(slot => slot.item == item);
         return existingSlot != null ? existingSlot.quantity : 0;
     }
+
+    public void RefreshUI()
+    {
+        onInventoryChanged?.Invoke();
+    }
 }
